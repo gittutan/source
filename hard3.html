@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>canvasTest</title>
+    <script type="text/javascript" src="http://www.pyzy.net/Demo/html5_cancas_js/excanvas.js"></script>
+    <script type="text/javascript">
+        var MyCanvas = function(boxObj, width, height) {
+            //序号、计数
+            this.index = arguments.callee.prototype.Count = (arguments.callee.prototype.Count || 0) + 1;
+            var cvs = document.createElement("canvas");
+            cvs.id = "myCanvas" + this.index;
+            cvs.width = width || 800;
+            cvs.height = height || 600;
+            (boxObj || document.body).appendChild(cvs);
+            //excanvas框架中针对ie加载canvas延时问题手动初始化对象
+            if (typeof G_vmlCanvasManager != "undefined") G_vmlCanvasManager.initElement(cvs);
+            //2D画布对象
+            this.ctx = cvs.getContext("2d");
+            /* * 绘制线条
+            * @ops JSON对象，可按实际支持属性扩展，示例：  { lineWidth:1,strokeStyle:'rgb(255,255,255)' }      
+            * @dotXY:{ x:0, y:0 } ||[{ x:0, y:0 },{ x:0, y:0 }]
+            */
+            this.drawLine = function(dotXY, ops) {
+                this.ctx.beginPath(); 
+                for (var att in ops) this.ctx[att] = ops[att];
+                dotXY = dotXY.constructor == Object ? [dotXY || { x: 0, y: 0}] : dotXY;
+                this.ctx.moveTo(dotXY[0].x, dotXY[0].y);
+                for (var i = 1, len = dotXY.length; i < len; i++) this.ctx.lineTo(dotXY[i].x, dotXY[i].y);
+                this.ctx.stroke();
+            };
+        };
+        window.onload=function(){
+            var c1 = new MyCanvas();
+            //c1.drawLine([{ x: 10, y: 10 }, { x: 10, y: 200 }],{lineWidth:2,strokeStyle:'rgb(0,0,0)'});
+            //c1.drawLine([{ x: 11, y: 10 }, { x: 11, y: 200 }],{lineWidth:2,strokeStyle:'rgb(255,255,255)'});
+            //c1.drawLine([{ x: 100, y: 10 }, { x: 100, y: 200 }],{lineWidth:1,strokeStyle:'rgb(0,0,0)'}); //普通线
+            c1.drawLine([{ x: 200.5, y: 10 }, { x: 200.5, y: 200 }],{lineWidth:5,strokeStyle:'rgb(0,0,0)'}); //+0.5偏移
+
+        }
+  
+    </script>
+</head>
+<body>
+↓ 处理的　　↓ 普通的　　↓ +0.5偏移的<br />
+</body>
+</html>
